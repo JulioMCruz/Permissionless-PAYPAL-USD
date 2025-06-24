@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -25,11 +24,11 @@ const mockReservations: Reservation[] = [
     id: "1",
     restaurantName: "Blue Hill at Stone Barns",
     location: "Pocantico Hills, NY",
-    date: "2024-06-28",
+    date: "2025-07-05",
     time: "19:30",
     pax: 2,
     status: 'confirmed',
-    confirmationNumber: "BH-2024-001",
+    confirmationNumber: "BH-2025-001",
     phone: "(914) 366-9600",
     specialRequests: "Anniversary dinner, window table preferred",
     reminderSet: true
@@ -38,11 +37,11 @@ const mockReservations: Reservation[] = [
     id: "2",
     restaurantName: "Per Se",
     location: "Columbus Circle, Manhattan",
-    date: "2024-07-05",
+    date: "2025-07-12",
     time: "18:00",
     pax: 4,
     status: 'confirmed',
-    confirmationNumber: "PS-2024-078",
+    confirmationNumber: "PS-2025-078",
     phone: "(212) 823-9335",
     specialRequests: "Dietary restrictions: vegetarian option for 1 guest",
     reminderSet: true
@@ -51,11 +50,11 @@ const mockReservations: Reservation[] = [
     id: "3",
     restaurantName: "Osteria Francescana NYC",
     location: "Midtown, Manhattan",
-    date: "2024-07-12",
+    date: "2025-07-20",
     time: "20:00",
     pax: 6,
     status: 'pending',
-    confirmationNumber: "OF-2024-156",
+    confirmationNumber: "OF-2025-156",
     phone: "(212) 555-0987",
     reminderSet: false
   },
@@ -63,11 +62,11 @@ const mockReservations: Reservation[] = [
     id: "4",
     restaurantName: "The French Laundry at Hudson Yards",
     location: "Hudson Yards, Manhattan",
-    date: "2024-07-20",
+    date: "2025-08-05",
     time: "19:00",
     pax: 2,
     status: 'confirmed',
-    confirmationNumber: "FL-2024-203",
+    confirmationNumber: "FL-2025-203",
     phone: "(212) 555-0654",
     specialRequests: "Wine pairing menu requested",
     reminderSet: true

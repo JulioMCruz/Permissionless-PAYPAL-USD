@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Star, Heart, MessageSquare, Sparkles, DollarSign } from "lucide-react";
 import { toast } from "sonner";
+import { NFTModal } from "./NFTModal";
 
 interface Review {
   id: string;
@@ -55,9 +56,16 @@ const mockReviews: Review[] = [
 
 export const ReviewsSection = () => {
   const [reviews] = useState<Review[]>(mockReviews);
+  const [selectedNFT, setSelectedNFT] = useState<Review | null>(null);
+  const [showNFTModal, setShowNFTModal] = useState(false);
 
   const handleTipReceived = (reviewId: string) => {
     toast.success("Someone tipped you for your review! 💰");
+  };
+
+  const handleViewNFT = (review: Review) => {
+    setSelectedNFT(review);
+    setShowNFTModal(true);
   };
 
   const renderStars = (rating: number) => {
@@ -150,6 +158,7 @@ export const ReviewsSection = () => {
                 <Button
                   variant="outline"
                   size="sm"
+                  onClick={() => handleViewNFT(review)}
                   className="flex items-center gap-1"
                 >
                   <Sparkles className="h-4 w-4 text-purple-500" />
@@ -160,6 +169,21 @@ export const ReviewsSection = () => {
           </Card>
         ))}
       </div>
+
+      {/* NFT Modal */}
+      {selectedNFT && (
+        <NFTModal
+          isOpen={showNFTModal}
+          onClose={() => {
+            setShowNFTModal(false);
+            setSelectedNFT(null);
+          }}
+          restaurantName={selectedNFT.restaurantName}
+          nftId={selectedNFT.nftId}
+          rating={selectedNFT.rating}
+          date={selectedNFT.date}
+        />
+      )}
     </div>
   );
 };
