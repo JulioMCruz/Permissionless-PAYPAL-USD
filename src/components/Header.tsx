@@ -37,8 +37,8 @@ export const Header = () => {
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <ChefHat className="h-8 w-8 text-orange-600" />
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+              <ChefHat className="h-8 w-8 text-blue-600" />
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
                 Silvia's Restaurant Dashboard
               </h1>
             </div>
@@ -56,8 +56,8 @@ export const Header = () => {
       <div className="max-w-6xl mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <ChefHat className="h-8 w-8 text-orange-600" />
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+            <ChefHat className="h-8 w-8 text-blue-600" />
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
               Silvia's Restaurant Dashboard
             </h1>
           </div>
@@ -67,7 +67,7 @@ export const Header = () => {
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2">
                   <Avatar className="h-8 w-8">
-                    <AvatarFallback className="bg-orange-100 text-orange-800 text-sm">
+                    <AvatarFallback className="bg-blue-100 text-blue-800 text-sm">
                       {getUserInitials()}
                     </AvatarFallback>
                   </Avatar>
@@ -104,7 +104,7 @@ export const Header = () => {
             ) : (
               <Button
                 onClick={handleAuth}
-                className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold flex items-center gap-2"
+                className="bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white font-semibold flex items-center gap-2 shadow-lg"
               >
                 <User className="h-4 w-4" />
                 Login

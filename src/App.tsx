@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -16,7 +15,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <div className="min-h-screen bg-gradient-to-br from-orange-50 via-red-50 to-pink-50">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-sky-50 to-white">
           <Header />
           <NetworkGuard>
             <Routes>
