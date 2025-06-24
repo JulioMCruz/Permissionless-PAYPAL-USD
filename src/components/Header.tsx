@@ -1,12 +1,16 @@
 import { usePrivy } from '@privy-io/react-auth'
+import { useAccount } from 'wagmi'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { ChefHat, Wallet, LogOut, User } from 'lucide-react'
+import { ChefHat, Wallet, LogOut, User, DollarSign } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
+import { usePYUSD } from '@/hooks/usePYUSD'
 
 export const Header = () => {
   const { login, logout, authenticated, user, ready } = usePrivy()
+  const { isConnected } = useAccount()
+  const { formattedBalance, isBalanceLoading } = usePYUSD()
 
   const handleAuth = () => {
     if (authenticated) {
@@ -85,10 +89,23 @@ export const Header = () => {
                 <Separator orientation="vertical" className="h-8" />
 
                 {user?.wallet && (
-                  <Badge variant="outline" className="flex items-center gap-1 text-xs">
-                    <Wallet className="h-3 w-3" />
-                    Sepolia
-                  </Badge>
+                  <>
+                    <Badge variant="outline" className="flex items-center gap-1 text-xs">
+                      <Wallet className="h-3 w-3" />
+                      Sepolia
+                    </Badge>
+                    
+                    {isConnected && (
+                      <Badge variant="secondary" className="flex items-center gap-1 text-xs bg-blue-50 text-blue-700 border-blue-200">
+                        <DollarSign className="h-3 w-3" />
+                        {isBalanceLoading ? (
+                          <div className="animate-spin rounded-full h-3 w-3 border-b border-blue-600"></div>
+                        ) : (
+                          `${formattedBalance} PYUSD`
+                        )}
+                      </Badge>
+                    )}
+                  </>
                 )}
 
                 <Button

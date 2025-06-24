@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -169,7 +168,7 @@ export const FavoriteRestaurants = () => {
                 <Button
                   size="sm"
                   onClick={() => handleMakeReservation(restaurant.name)}
-                  className="flex items-center gap-1 flex-1 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+                  className="flex items-center gap-1 flex-1 bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 shadow-lg"
                 >
                   <Clock className="h-4 w-4" />
                   <span className="text-xs">Reserve</span>
