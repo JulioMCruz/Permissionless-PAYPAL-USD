@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -83,14 +84,21 @@ const mockBills: RestaurantBill[] = [
     tax: 17.82,
     tip: 29.70,
     total: 245.52,
-    status: 'pending'
+    status: 'paid'
   }
 ];
 
 export const RestaurantDashboard = () => {
   const [selectedBill, setSelectedBill] = useState<RestaurantBill | null>(null);
   const [showPayment, setShowPayment] = useState(false);
-  const [bills, setBills] = useState(mockBills);
+  
+  // Ensure only one pending bill exists (the most recent one)
+  const processedBills = mockBills.map((bill, index) => ({
+    ...bill,
+    status: index === 0 ? 'pending' as const : 'paid' as const
+  }));
+  
+  const [bills, setBills] = useState(processedBills);
 
   const handlePayment = (billId: string) => {
     setBills(prev => prev.map(bill => 
