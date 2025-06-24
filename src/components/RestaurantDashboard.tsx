@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ChefHat, MapPin, Users, CreditCard, Clock, CheckCircle } from "lucide-react";
+import { ChefHat, MapPin, Users, CreditCard, Clock, CheckCircle, Heart, Calendar } from "lucide-react";
 import { PaymentModal } from "./PaymentModal";
 import { ReviewsSection } from "./ReviewsSection";
+import { FavoriteRestaurants } from "./FavoriteRestaurants";
+import { UpcomingReservations } from "./UpcomingReservations";
 
 export interface RestaurantBill {
   id: string;
@@ -161,11 +163,13 @@ export const RestaurantDashboard = () => {
           </Card>
         </div>
 
-        {/* Tabs for Bills and Reviews */}
+        {/* Tabs for Bills, Reviews, Favorites, and Reservations */}
         <Tabs defaultValue="bills" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-6">
+          <TabsList className="grid w-full grid-cols-4 mb-6">
             <TabsTrigger value="bills">Restaurant Bills</TabsTrigger>
             <TabsTrigger value="reviews">My Reviews</TabsTrigger>
+            <TabsTrigger value="favorites">Favorites</TabsTrigger>
+            <TabsTrigger value="reservations">Reservations</TabsTrigger>
           </TabsList>
 
           <TabsContent value="bills">
@@ -264,6 +268,14 @@ export const RestaurantDashboard = () => {
 
           <TabsContent value="reviews">
             <ReviewsSection />
+          </TabsContent>
+
+          <TabsContent value="favorites">
+            <FavoriteRestaurants />
+          </TabsContent>
+
+          <TabsContent value="reservations">
+            <UpcomingReservations />
           </TabsContent>
         </Tabs>
 
