@@ -1,11 +1,12 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChefHat, MapPin, Users, CreditCard, Clock, CheckCircle } from "lucide-react";
 import { PaymentModal } from "./PaymentModal";
+import { ReviewsSection } from "./ReviewsSection";
 
 export interface RestaurantBill {
   id: string;
@@ -160,97 +161,111 @@ export const RestaurantDashboard = () => {
           </Card>
         </div>
 
-        {/* Bills Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {bills.map((bill) => (
-            <Card key={bill.id} className="hover:shadow-xl transition-all duration-300 border-2 hover:border-orange-200">
-              <CardHeader className="pb-3">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle className="text-xl text-gray-800 flex items-center gap-2">
-                      <ChefHat className="h-5 w-5 text-orange-600" />
-                      {bill.restaurantName}
-                    </CardTitle>
-                    <div className="flex items-center gap-2 mt-2 text-gray-600">
-                      <MapPin className="h-4 w-4" />
-                      <span className="text-sm">{bill.location}</span>
-                    </div>
-                  </div>
-                  <Badge variant={bill.status === 'paid' ? 'default' : 'destructive'} className="text-xs">
-                    {bill.status === 'paid' ? 'PAID' : 'PENDING'}
-                  </Badge>
-                </div>
-              </CardHeader>
-              
-              <CardContent>
-                <div className="space-y-4">
-                  {/* Date and Pax */}
-                  <div className="flex justify-between items-center text-sm text-gray-600">
-                    <span>{new Date(bill.date).toLocaleDateString()}</span>
-                    <div className="flex items-center gap-1">
-                      <Users className="h-4 w-4" />
-                      <span>{bill.pax} pax</span>
-                    </div>
-                  </div>
+        {/* Tabs for Bills and Reviews */}
+        <Tabs defaultValue="bills" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsTrigger value="bills">Restaurant Bills</TabsTrigger>
+            <TabsTrigger value="reviews">My Reviews</TabsTrigger>
+          </TabsList>
 
-                  <Separator />
-
-                  {/* Items */}
-                  <div className="space-y-2">
-                    <h4 className="font-semibold text-gray-800">What you consumed:</h4>
-                    {bill.items.map((item, index) => (
-                      <div key={index} className="flex justify-between text-sm">
-                        <span className="text-gray-700">
-                          {item.quantity > 1 ? `${item.quantity}x ` : ''}{item.name}
-                        </span>
-                        <span className="font-medium">
-                          ${(item.price * item.quantity).toFixed(2)}
-                        </span>
+          <TabsContent value="bills">
+            {/* Bills Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {bills.map((bill) => (
+                <Card key={bill.id} className="hover:shadow-xl transition-all duration-300 border-2 hover:border-orange-200">
+                  <CardHeader className="pb-3">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <CardTitle className="text-xl text-gray-800 flex items-center gap-2">
+                          <ChefHat className="h-5 w-5 text-orange-600" />
+                          {bill.restaurantName}
+                        </CardTitle>
+                        <div className="flex items-center gap-2 mt-2 text-gray-600">
+                          <MapPin className="h-4 w-4" />
+                          <span className="text-sm">{bill.location}</span>
+                        </div>
                       </div>
-                    ))}
-                  </div>
+                      <Badge variant={bill.status === 'paid' ? 'default' : 'destructive'} className="text-xs">
+                        {bill.status === 'paid' ? 'PAID' : 'PENDING'}
+                      </Badge>
+                    </div>
+                  </CardHeader>
+                  
+                  <CardContent>
+                    <div className="space-y-4">
+                      {/* Date and Pax */}
+                      <div className="flex justify-between items-center text-sm text-gray-600">
+                        <span>{new Date(bill.date).toLocaleDateString()}</span>
+                        <div className="flex items-center gap-1">
+                          <Users className="h-4 w-4" />
+                          <span>{bill.pax} pax</span>
+                        </div>
+                      </div>
 
-                  <Separator />
+                      <Separator />
 
-                  {/* Totals */}
-                  <div className="space-y-1 text-sm">
-                    <div className="flex justify-between">
-                      <span>Subtotal:</span>
-                      <span>${bill.subtotal.toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Tax:</span>
-                      <span>${bill.tax.toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Tip:</span>
-                      <span>${bill.tip.toFixed(2)}</span>
-                    </div>
-                    <Separator />
-                    <div className="flex justify-between font-bold text-lg">
-                      <span>Total:</span>
-                      <span className="text-orange-600">${bill.total.toFixed(2)}</span>
-                    </div>
-                  </div>
+                      {/* Items */}
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-gray-800">What you consumed:</h4>
+                        {bill.items.map((item, index) => (
+                          <div key={index} className="flex justify-between text-sm">
+                            <span className="text-gray-700">
+                              {item.quantity > 1 ? `${item.quantity}x ` : ''}{item.name}
+                            </span>
+                            <span className="font-medium">
+                              ${(item.price * item.quantity).toFixed(2)}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
 
-                  {/* Pay Button */}
-                  {bill.status === 'pending' && (
-                    <Button 
-                      onClick={() => {
-                        setSelectedBill(bill);
-                        setShowPayment(true);
-                      }}
-                      className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 rounded-lg transition-all duration-300 transform hover:scale-105"
-                    >
-                      <CreditCard className="h-4 w-4 mr-2" />
-                      Pay Now - ${bill.total.toFixed(2)}
-                    </Button>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                      <Separator />
+
+                      {/* Totals */}
+                      <div className="space-y-1 text-sm">
+                        <div className="flex justify-between">
+                          <span>Subtotal:</span>
+                          <span>${bill.subtotal.toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Tax:</span>
+                          <span>${bill.tax.toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Tip:</span>
+                          <span>${bill.tip.toFixed(2)}</span>
+                        </div>
+                        <Separator />
+                        <div className="flex justify-between font-bold text-lg">
+                          <span>Total:</span>
+                          <span className="text-orange-600">${bill.total.toFixed(2)}</span>
+                        </div>
+                      </div>
+
+                      {/* Pay Button */}
+                      {bill.status === 'pending' && (
+                        <Button 
+                          onClick={() => {
+                            setSelectedBill(bill);
+                            setShowPayment(true);
+                          }}
+                          className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 rounded-lg transition-all duration-300 transform hover:scale-105"
+                        >
+                          <CreditCard className="h-4 w-4 mr-2" />
+                          Pay Now - ${bill.total.toFixed(2)}
+                        </Button>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="reviews">
+            <ReviewsSection />
+          </TabsContent>
+        </Tabs>
 
         {/* Payment Modal */}
         {showPayment && selectedBill && (

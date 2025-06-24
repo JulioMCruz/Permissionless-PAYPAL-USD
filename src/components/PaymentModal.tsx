@@ -1,5 +1,5 @@
-
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,7 @@ interface PaymentModalProps {
 }
 
 export const PaymentModal = ({ bill, onPayment, onClose }: PaymentModalProps) => {
+  const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
   const [cardNumber, setCardNumber] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
@@ -28,6 +29,8 @@ export const PaymentModal = ({ bill, onPayment, onClose }: PaymentModalProps) =>
     setTimeout(() => {
       onPayment(bill.id);
       setIsProcessing(false);
+      // Navigate to review page after successful payment
+      navigate(`/review/${bill.id}`);
     }, 2000);
   };
 
