@@ -1,0 +1,33 @@
+{
+  "network": "sepolia",
+  "chainId": "11155111",
+  "deployer": "0x1234567890123456789012345678901234567890",
+  "blockNumber": 5234567,
+  "timestamp": "2024-06-24T10:30:00.000Z",
+  "gasPrice": "20000000000",
+  "contracts": {
+    "paymentProcessor": {
+      "address": "0xA1B2C3D4E5F6789012345678901234567890ABCD",
+      "name": "PaymentProcessor",
+      "transactionHash": "0x1111111111111111111111111111111111111111111111111111111111111111",
+      "constructorArgs": [
+        "0xf290590D47c81820427A108Ce6363607a03Aaf1b",
+        "0x1234567890123456789012345678901234567890"
+      ]
+    },
+    "reviewNFT": {
+      "address": "0xE1F2A3B4C5D6789012345678901234567890EFAB",
+      "name": "ReviewNFT",
+      "transactionHash": "0x2222222222222222222222222222222222222222222222222222222222222222",
+      "constructorArgs": [
+        "0xA1B2C3D4E5F6789012345678901234567890ABCD",
+        "https://api.restaurant-nft.com/images/"
+      ]
+    }
+  },
+  "config": {
+    "pyusdTokenAddress": "0xf290590D47c81820427A108Ce6363607a03Aaf1b",
+    "feeRecipientAddress": "0x1234567890123456789012345678901234567890",
+    "baseImageURI": "https://api.restaurant-nft.com/images/"
+  }
+}

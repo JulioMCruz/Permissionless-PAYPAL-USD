@@ -1,5 +1,5 @@
 // PaymentProcessor Smart Contract ABI
-// Auto-generated on 2025-06-24T01:55:11.676Z
+// Auto-generated on 2025-06-24T02:08:30.892Z
 
 export const PAYMENT_PROCESSOR_ABI = [
   {
