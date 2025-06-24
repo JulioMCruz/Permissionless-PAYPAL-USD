@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -67,7 +66,7 @@ export const ReviewPage = () => {
               </CardTitle>
             </div>
             <div className="flex items-center justify-center gap-2">
-              <ChefHat className="h-6 w-6 text-orange-600" />
+              <ChefHat className="h-6 w-6 text-blue-600" />
               <h2 className="text-xl font-semibold text-gray-800">{restaurantName}</h2>
             </div>
             <Badge className="mx-auto mt-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white">

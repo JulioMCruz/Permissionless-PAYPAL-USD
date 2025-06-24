@@ -37,7 +37,7 @@ export const Web3Provider = ({ children }: Web3ProviderProps) => {
       config={{
         appearance: {
           theme: 'light',
-          accentColor: '#ea580c',
+          accentColor: '#2563eb',
         },
         loginMethods: ['email', 'wallet'],
         embeddedWallets: {

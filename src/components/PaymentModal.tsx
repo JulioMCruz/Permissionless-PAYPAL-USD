@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAccount } from "wagmi";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { CreditCard, Lock, MapPin, Users, ChefHat } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Wallet, MapPin, Users, ChefHat, AlertCircle, CheckCircle, DollarSign } from "lucide-react";
 import { RestaurantBill } from "./RestaurantDashboard";
+import { usePYUSD } from "@/hooks/usePYUSD";
+import { PYUSD_CONFIG } from "@/lib/pyusd-config";
 
 interface PaymentModalProps {
   bill: RestaurantBill;
@@ -16,62 +19,58 @@ interface PaymentModalProps {
 
 export const PaymentModal = ({ bill, onPayment, onClose }: PaymentModalProps) => {
   const navigate = useNavigate();
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [cardNumber, setCardNumber] = useState("");
-  const [expiryDate, setExpiryDate] = useState("");
-  const [cvv, setCvv] = useState("");
-  const [cardName, setCardName] = useState("");
+  const { address, isConnected } = useAccount();
+  const { 
+    formattedBalance, 
+    isBalanceLoading, 
+    transferPYUSD, 
+    isTransactionPending, 
+    hasSufficientBalance,
+    transactionHash 
+  } = usePYUSD();
+  
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
 
-  const handlePayment = async () => {
-    setIsProcessing(true);
+  // Mock restaurant wallet address (in real app, this would come from the restaurant's profile)
+  const restaurantWalletAddress = "0x742E48F3c62Ee6e6cD7C8AB24b6eFBf5e1C58267"; // Replace with actual restaurant address
+
+  useEffect(() => {
+    if (transactionHash && !isTransactionPending) {
+      setPaymentSuccess(true);
+      // Wait a moment then complete the payment flow
+      setTimeout(() => {
+        onPayment(bill.id);
+        navigate(`/review/${bill.id}`);
+      }, 2000);
+    }
+  }, [transactionHash, isTransactionPending, bill.id, onPayment, navigate]);
+
+  const handlePYUSDPayment = async () => {
+    if (!isConnected || !address) {
+      return;
+    }
     
-    // Simulate payment processing
-    setTimeout(() => {
-      onPayment(bill.id);
-      setIsProcessing(false);
-      // Navigate to review page after successful payment
-      navigate(`/review/${bill.id}`);
-    }, 2000);
+    await transferPYUSD(restaurantWalletAddress as `0x${string}`, bill.total);
   };
 
-  const formatCardNumber = (value: string) => {
-    const v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
-    const matches = v.match(/\d{4,16}/g);
-    const match = matches && matches[0] || '';
-    const parts = [];
-    for (let i = 0, len = match.length; i < len; i += 4) {
-      parts.push(match.substring(i, i + 4));
-    }
-    if (parts.length) {
-      return parts.join(' ');
-    } else {
-      return v;
-    }
-  };
-
-  const formatExpiryDate = (value: string) => {
-    const v = value.replace(/\D/g, '');
-    if (v.length >= 2) {
-      return v.substring(0, 2) + '/' + v.substring(2, 4);
-    }
-    return v;
-  };
+  const hasSufficientFunds = hasSufficientBalance(bill.total);
+  const isReadyToPay = isConnected && address && hasSufficientFunds && !isTransactionPending;
 
   return (
     <Dialog open={true} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center text-gray-800 flex items-center justify-center gap-2">
-            <CreditCard className="h-6 w-6 text-orange-600" />
-            Complete Payment
+            <DollarSign className="h-6 w-6 text-blue-600" />
+            Pay with PYUSD
           </DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6">
           {/* Bill Summary */}
-          <div className="bg-gradient-to-r from-orange-50 to-red-50 p-6 rounded-lg border-2 border-orange-200">
+          <div className="bg-gradient-to-r from-blue-50 to-sky-50 p-6 rounded-lg border-2 border-blue-200">
             <div className="flex items-center gap-3 mb-4">
-              <ChefHat className="h-6 w-6 text-orange-600" />
+              <ChefHat className="h-6 w-6 text-blue-600" />
               <div>
                 <h3 className="text-xl font-bold text-gray-800">{bill.restaurantName}</h3>
                 <div className="flex items-center gap-2 text-gray-600 text-sm">
@@ -114,75 +113,92 @@ export const PaymentModal = ({ bill, onPayment, onClose }: PaymentModalProps) =>
                 <Separator className="my-2" />
                 <div className="flex justify-between font-bold text-lg">
                   <span>Total Amount:</span>
-                  <span className="text-orange-600">${bill.total.toFixed(2)}</span>
+                  <span className="text-blue-600">${bill.total.toFixed(2)} PYUSD</span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Payment Form */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-              <Lock className="h-5 w-5 text-green-600" />
-              Secure Payment Details
-            </h3>
-            
-            <div className="grid grid-cols-1 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="cardName">Cardholder Name</Label>
-                <Input
-                  id="cardName"
-                  placeholder="Silvia Rodriguez"
-                  value={cardName}
-                  onChange={(e) => setCardName(e.target.value)}
+          {/* PYUSD Payment Section */}
+          <Card className="border-blue-200">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <img 
+                  src="https://cryptologos.cc/logos/paypal-usd-pyusd-logo.png" 
+                  alt="PYUSD" 
+                  className="h-8 w-8 rounded-full"
                 />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="cardNumber">Card Number</Label>
-                <Input
-                  id="cardNumber"
-                  placeholder="1234 5678 9012 3456"
-                  value={cardNumber}
-                  onChange={(e) => setCardNumber(formatCardNumber(e.target.value))}
-                  maxLength={19}
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="expiryDate">Expiry Date</Label>
-                  <Input
-                    id="expiryDate"
-                    placeholder="MM/YY"
-                    value={expiryDate}
-                    onChange={(e) => setExpiryDate(formatExpiryDate(e.target.value))}
-                    maxLength={5}
-                  />
+                <div>
+                  <h3 className="font-bold text-gray-800">PayPal USD (PYUSD)</h3>
+                  <p className="text-sm text-gray-600">Pay instantly with stablecoin</p>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="cvv">CVV</Label>
-                  <Input
-                    id="cvv"
-                    placeholder="123"
-                    value={cvv}
-                    onChange={(e) => setCvv(e.target.value.replace(/\D/g, ''))}
-                    maxLength={4}
-                  />
-                </div>
+                <Badge variant="secondary" className="ml-auto">
+                  1:1 USD Parity
+                </Badge>
               </div>
-            </div>
-          </div>
 
-          {/* Security Notice */}
-          <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-            <div className="flex items-center gap-2 text-green-800">
-              <Lock className="h-5 w-5" />
-              <span className="text-sm font-medium">
-                Your payment information is encrypted and secure
-              </span>
-            </div>
-          </div>
+              {!isConnected ? (
+                <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200 mb-4">
+                  <div className="flex items-center gap-2 text-yellow-800">
+                    <AlertCircle className="h-5 w-5" />
+                    <span className="text-sm font-medium">
+                      Please connect your wallet to pay with PYUSD
+                    </span>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {/* Wallet Balance */}
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-medium text-gray-700">Your PYUSD Balance:</span>
+                      <div className="flex items-center gap-2">
+                        {isBalanceLoading ? (
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                        ) : (
+                          <>
+                            <span className="font-bold text-gray-800">{formattedBalance} PYUSD</span>
+                            {hasSufficientFunds ? (
+                              <CheckCircle className="h-4 w-4 text-green-600" />
+                            ) : (
+                              <AlertCircle className="h-4 w-4 text-red-600" />
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Insufficient Balance Warning */}
+                  {!hasSufficientFunds && !isBalanceLoading && (
+                    <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+                      <div className="flex items-center gap-2 text-red-800">
+                        <AlertCircle className="h-5 w-5" />
+                        <div>
+                          <span className="text-sm font-medium">Insufficient PYUSD Balance</span>
+                          <p className="text-xs text-red-700 mt-1">
+                            You need ${bill.total.toFixed(2)} PYUSD but only have {formattedBalance} PYUSD
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Payment Success */}
+                  {paymentSuccess && (
+                    <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                      <div className="flex items-center gap-2 text-green-800">
+                        <CheckCircle className="h-5 w-5" />
+                        <span className="text-sm font-medium">
+                          Payment successful! Redirecting to review page...
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </CardContent>
+          </Card>
 
           {/* Action Buttons */}
           <div className="flex gap-3 pt-4">
@@ -190,24 +206,29 @@ export const PaymentModal = ({ bill, onPayment, onClose }: PaymentModalProps) =>
               variant="outline"
               onClick={onClose}
               className="flex-1"
-              disabled={isProcessing}
+              disabled={isTransactionPending}
             >
               Cancel
             </Button>
             <Button
-              onClick={handlePayment}
-              disabled={isProcessing || !cardNumber || !expiryDate || !cvv || !cardName}
-              className="flex-1 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold"
+              onClick={handlePYUSDPayment}
+              disabled={!isReadyToPay || paymentSuccess}
+              className="flex-1 bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white font-semibold shadow-lg"
             >
-              {isProcessing ? (
+              {isTransactionPending ? (
                 <div className="flex items-center gap-2">
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                  Processing...
+                  Processing Payment...
+                </div>
+              ) : paymentSuccess ? (
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4" />
+                  Payment Complete
                 </div>
               ) : (
                 <>
-                  <CreditCard className="h-4 w-4 mr-2" />
-                  Pay ${bill.total.toFixed(2)}
+                  <Wallet className="h-4 w-4 mr-2" />
+                  Pay {bill.total.toFixed(2)} PYUSD
                 </>
               )}
             </Button>

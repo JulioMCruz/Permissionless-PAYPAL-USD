@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -122,15 +121,15 @@ export const RestaurantDashboard = () => {
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card className="border-orange-200 shadow-lg">
+          <Card className="border-blue-200 shadow-lg">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
-                <div className="bg-orange-100 p-3 rounded-full">
-                  <Clock className="h-6 w-6 text-orange-600" />
+                <div className="bg-blue-100 p-3 rounded-full">
+                  <Clock className="h-6 w-6 text-blue-600" />
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">Pending Bills</p>
-                  <p className="text-2xl font-bold text-orange-600">{pendingBills.length}</p>
+                  <p className="text-2xl font-bold text-blue-600">{pendingBills.length}</p>
                 </div>
               </div>
             </CardContent>
@@ -150,15 +149,15 @@ export const RestaurantDashboard = () => {
             </CardContent>
           </Card>
 
-          <Card className="border-red-200 shadow-lg">
+          <Card className="border-blue-200 shadow-lg">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
-                <div className="bg-red-100 p-3 rounded-full">
-                  <CreditCard className="h-6 w-6 text-red-600" />
+                <div className="bg-blue-100 p-3 rounded-full">
+                  <CreditCard className="h-6 w-6 text-blue-600" />
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">Amount Due</p>
-                  <p className="text-2xl font-bold text-red-600">${totalPending.toFixed(2)}</p>
+                  <p className="text-2xl font-bold text-blue-600">${totalPending.toFixed(2)}</p>
                 </div>
               </div>
             </CardContent>
@@ -178,12 +177,12 @@ export const RestaurantDashboard = () => {
             {/* Bills Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {bills.map((bill) => (
-                <Card key={bill.id} className="hover:shadow-xl transition-all duration-300 border-2 hover:border-orange-200">
+                <Card key={bill.id} className="hover:shadow-xl transition-all duration-300 border-2 hover:border-blue-200">
                   <CardHeader className="pb-3">
                     <div className="flex justify-between items-start">
                       <div>
                         <CardTitle className="text-xl text-gray-800 flex items-center gap-2">
-                          <ChefHat className="h-5 w-5 text-orange-600" />
+                          <ChefHat className="h-5 w-5 text-blue-600" />
                           {bill.restaurantName}
                         </CardTitle>
                         <div className="flex items-center gap-2 mt-2 text-gray-600">
@@ -244,7 +243,7 @@ export const RestaurantDashboard = () => {
                         <Separator />
                         <div className="flex justify-between font-bold text-lg">
                           <span>Total:</span>
-                          <span className="text-orange-600">${bill.total.toFixed(2)}</span>
+                          <span className="text-blue-600">${bill.total.toFixed(2)}</span>
                         </div>
                       </div>
 
@@ -255,7 +254,7 @@ export const RestaurantDashboard = () => {
                             setSelectedBill(bill);
                             setShowPayment(true);
                           }}
-                          className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 rounded-lg transition-all duration-300 transform hover:scale-105"
+                          className="w-full bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white font-semibold py-3 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
                         >
                           <CreditCard className="h-4 w-4 mr-2" />
                           Pay Now - ${bill.total.toFixed(2)}
