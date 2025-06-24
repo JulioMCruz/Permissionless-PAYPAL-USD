@@ -1,0 +1,55 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IReviewNFT",
+  "sourceName": "contracts/test/MockPaymentProcessor.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_reviewer",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_restaurant",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_billId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint8",
+          "name": "_rating",
+          "type": "uint8"
+        },
+        {
+          "internalType": "string",
+          "name": "_reviewText",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_restaurantName",
+          "type": "string"
+        }
+      ],
+      "name": "createReview",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

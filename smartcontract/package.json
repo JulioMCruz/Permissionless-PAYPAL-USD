@@ -6,6 +6,7 @@
     "compile": "hardhat compile",
     "test": "hardhat test",
     "deploy:sepolia": "hardhat run scripts/deploy.js --network sepolia",
+    "deploy:all": "hardhat run scripts/deploy-all.js --network sepolia",
     "register:restaurants": "hardhat run scripts/register-restaurants.js --network sepolia",
     "verify": "hardhat verify --network sepolia",
     "export:abi": "node scripts/export-abi.js",
