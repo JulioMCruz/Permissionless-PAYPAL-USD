@@ -113,16 +113,10 @@ export const RestaurantDashboard = () => {
   const totalPending = pendingBills.reduce((sum, bill) => sum + bill.total, 0);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-red-50 to-pink-50 p-4">
+    <div className="p-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <ChefHat className="h-8 w-8 text-orange-600" />
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-              Silvia's Restaurant Dashboard
-            </h1>
-          </div>
           <p className="text-gray-600 text-lg">Track your dining experiences and manage payments</p>
         </div>
 
